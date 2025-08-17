@@ -44,6 +44,18 @@ detector = LanguageDetectorBuilder.from_languages(
     Language.ENGLISH
 ).build()
 
+async def start_client():
+    """Запуск Telegram клиента"""
+    await client.start()
+    logger.info("Telegram client started successfully")
+
+@app.before_first_request
+def before_first_request():
+    """Запуск клиента перед первым запросом"""
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(start_client())
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -52,7 +64,8 @@ def index():
 def health_check():
     return jsonify({
         'status': 'healthy',
-        'timestamp': datetime.now(timezone.utc).isoformat()
+        'timestamp': datetime.now(timezone.utc).isoformat(),
+        'telegram_client': client.is_connected()
     })
 
 if __name__ == '__main__':
