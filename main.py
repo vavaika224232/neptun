@@ -1,8 +1,7 @@
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify
 import logging
-import aiohttp
 import asyncio
 from datetime import datetime, timezone
 import pytz
