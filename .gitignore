@@ -1,0 +1,41 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Cache files
+*.cache
+geocoding_cache.json
+opencage_cache.json
+
+# Database
+*.db
+*.sqlite3
+*.sqlite
+*.session
+*.session-journal
+
+# Other
+.DS_Store
+Thumbs.db
