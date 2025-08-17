@@ -1,23 +1,25 @@
 import os
 from dotenv import load_dotenv
 from flask import Flask, render_template, jsonify, request
-from telegram import Bot
-from telegram.ext import Application
 import logging
 import aiohttp
 import asyncio
 from datetime import datetime, timezone
 import pytz
 from lingua import Language, LanguageDetectorBuilder
+from telethon import TelegramClient
 
 # Загрузка переменных окружения
 load_dotenv()
 
-# Настройки
+# Настройки Telegram
+API_ID = int(os.getenv('TELEGRAM_API_ID'))  # Должно быть установлено в переменных окружения
+API_HASH = os.getenv('TELEGRAM_API_HASH')   # Должно быть установлено в переменных окружения
+OPENCAGE_API_KEY = os.getenv('OPENCAGE_API_KEY')
+
+# Настройки сервера
 PORT = int(os.getenv('PORT', 10000))
 HOST = os.getenv('HOST', '0.0.0.0')
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
-OPENCAGE_API_KEY = os.getenv('OPENCAGE_API_KEY')
 
 # Инициализация Flask
 app = Flask(__name__)
@@ -32,9 +34,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Инициализация Telegram бота
-bot = Bot(token=TELEGRAM_BOT_TOKEN)
-application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+# Инициализация Telegram клиента
+client = TelegramClient('anon', API_ID, API_HASH)
 
 # Инициализация детектора языка
 detector = LanguageDetectorBuilder.from_languages(
